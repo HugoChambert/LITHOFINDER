@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>LITHOFINDER</title>
+    <script>
+      // GitHub Pages SPA redirect workaround.
+      // Encodes the full URL into a query param on the root index,
+      // which then decodes it and restores the correct route via history.replaceState.
+      var path = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+      var basePath = '';  // Set to '/your-repo-name' if using a project page
+
+      var redirectUrl = window.location.origin + basePath + '/?p=' +
+        encodeURIComponent(path.slice(basePath.length) + search + hash);
+
+      window.location.replace(redirectUrl);
+    </script>
+  </head>
+  <body></body>
+</html>

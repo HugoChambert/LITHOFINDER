@@ -1,8 +1,9 @@
-import { type NextRequest } from 'next/server';
-import { updateSession } from '@/lib/supabase/middleware';
+import { type NextRequest, NextResponse } from 'next/server';
 
+// NOTE: GitHub Pages serves static files only — this middleware is a no-op.
+// Session refresh is handled client-side via Supabase's onAuthStateChange.
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  return NextResponse.next();
 }
 
 export const config = {

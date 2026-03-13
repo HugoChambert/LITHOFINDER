@@ -1,95 +1,24 @@
-import { createClient } from '@/lib/supabase/server';
-import { MapPin, Phone, Mail } from 'lucide-react';
-import { SlabCard } from '@/components/slab-card';
-import { notFound } from 'next/navigation';
+import { createBuildClient } from '@/lib/supabase/build-client';
+import SupplierContent from './supplier-content';
 
-export default async function SupplierProfilePage({ params }: { params: { id: string } }) {
-  const supabase = await createClient();
+// Pre-renders a page for every supplier ID at build time.
+// New suppliers added after a deploy will still load via client-side fetch
+// but won't have a pre-rendered HTML shell until the next build.
+export async function generateStaticParams() {
+  try {
+    const supabase = createBuildClient();
+    const { data: suppliers } = await supabase
+      .from('suppliers')
+      .select('id');
 
-  const { data: supplier } = await supabase
-    .from('suppliers')
-    .select('*')
-    .eq('id', params.id)
-    .maybeSingle();
-
-  if (!supplier) {
-    notFound();
+    return (suppliers || []).map((s) => ({ id: s.id }));
+  } catch {
+    // If Supabase is unreachable at build time, return empty array
+    // (pages will still work client-side)
+    return [];
   }
+}
 
-  const { data: slabs } = await supabase
-    .from('slabs')
-    .select(`
-      *,
-      supplier:suppliers(*)
-    `)
-    .eq('supplier_id', params.id)
-    .order('created_at', { ascending: false });
-
-  return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
-          {supplier.business_name}
-        </h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {supplier.address && (
-            <div className="flex items-start space-x-3">
-              <MapPin className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="text-gray-900 dark:text-white">{supplier.address}</p>
-                {supplier.city && supplier.state && (
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {supplier.city}, {supplier.state} {supplier.zip_code}
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
-
-          <div className="flex items-center space-x-3">
-            <Mail className="w-5 h-5 text-gray-400 flex-shrink-0" />
-            <a
-              href={`mailto:${supplier.contact_email}`}
-              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              {supplier.contact_email}
-            </a>
-          </div>
-
-          {supplier.contact_phone && (
-            <div className="flex items-center space-x-3">
-              <Phone className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              <a
-                href={`tel:${supplier.contact_phone}`}
-                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                {supplier.contact_phone}
-              </a>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Available Slabs ({slabs?.length || 0})
-        </h2>
-      </div>
-
-      {!slabs || slabs.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-12 text-center">
-          <p className="text-gray-600 dark:text-gray-400">
-            This supplier currently has no slabs listed
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {slabs.map((slab) => (
-            <SlabCard key={slab.id} slab={slab} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+export default function SupplierProfilePage({ params }: { params: { id: string } }) {
+  return <SupplierContent id={params.id} />;
 }

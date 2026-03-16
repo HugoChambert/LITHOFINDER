@@ -48,6 +48,14 @@ export default function AddSlabPage() {
       return;
     }
 
+    const isActive = supplierData.subscription_status === 'active' || supplierData.subscription_status === 'trialing';
+
+    if (!isActive) {
+      alert('You need an active subscription to upload slabs');
+      router.push('/dashboard/subscription');
+      return;
+    }
+
     setSupplier(supplierData);
   };
 

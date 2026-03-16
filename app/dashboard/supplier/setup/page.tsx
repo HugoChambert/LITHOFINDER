@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import SetupContent from './setup-content';
 
+export const dynamic = 'force-dynamic';
+
 export default function SupplierSetupPage() {
   return (
     <Suspense fallback={

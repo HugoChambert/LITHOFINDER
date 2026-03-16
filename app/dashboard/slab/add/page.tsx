@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import type { Supplier } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 const materials = ['Quartzite', 'Granite', 'Marble', 'Quartz'];
 const finishes = ['Honed', 'Polished', 'Leathered'];
 const thicknesses = ['2cm', '3cm'];

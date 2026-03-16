@@ -6,6 +6,8 @@ import { SlabCard } from '@/components/slab-card';
 import { createClient } from '@/lib/supabase/client';
 import type { Slab } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   const [slabs, setSlabs] = useState<Slab[]>([]);
   const [filteredSlabs, setFilteredSlabs] = useState<Slab[]>([]);

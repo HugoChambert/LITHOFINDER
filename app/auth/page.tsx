@@ -47,41 +47,45 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <Mountain className="w-16 h-16 text-blue-600" />
+        <div className="text-center mb-10">
+          <div className="flex justify-center mb-6">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 shadow-xl">
+              <Mountain className="w-12 h-12 text-white" />
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-4xl font-bold mb-3 tracking-tight" style={{ color: 'var(--foreground)' }}>
             Welcome to LITHOFINDER
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            {isLogin ? 'Sign in to manage your listings' : 'Create an account to get started'}
+          <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
+            {isLogin ? 'Sign in to manage your listings' : 'Create your free account'}
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-          <div className="flex mb-6 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+        <div className="card-elevated p-8">
+          <div className="flex mb-8 p-1 rounded-xl" style={{ background: 'var(--hover-bg)' }}>
             <button
               type="button"
               onClick={() => setIsLogin(true)}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
                 isLogin
-                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400'
+                  ? 'bg-[var(--accent)] text-white shadow-md'
+                  : ''
               }`}
+              style={!isLogin ? { color: 'var(--text-secondary)' } : undefined}
             >
               Sign In
             </button>
             <button
               type="button"
               onClick={() => setIsLogin(false)}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
                 !isLogin
-                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400'
+                  ? 'bg-[var(--accent)] text-white shadow-md'
+                  : ''
               }`}
+              style={isLogin ? { color: 'var(--text-secondary)' } : undefined}
             >
               Sign Up
             </button>
@@ -89,7 +93,7 @@ export default function AuthPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
                 Email
               </label>
               <input
@@ -97,13 +101,13 @@ export default function AuthPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="input-field w-full"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
                 Password
               </label>
               <input
@@ -111,7 +115,7 @@ export default function AuthPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="input-field w-full"
                 placeholder="••••••••"
                 minLength={6}
               />
@@ -120,11 +124,23 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+              className="btn-primary w-full"
             >
-              {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Sign Up'}
+              {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
             </button>
           </form>
+
+          <p className="text-center text-sm mt-6" style={{ color: 'var(--text-secondary)' }}>
+            {isLogin ? "New to LITHOFINDER? " : "Already have an account? "}
+            <button
+              type="button"
+              onClick={() => setIsLogin(!isLogin)}
+              className="font-medium hover:underline"
+              style={{ color: 'var(--accent)' }}
+            >
+              {isLogin ? 'Create an account' : 'Sign in'}
+            </button>
+          </p>
         </div>
       </div>
     </div>

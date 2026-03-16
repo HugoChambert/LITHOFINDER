@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
+import { ThemeProvider } from "@/lib/theme-context";
 import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -20,9 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        {/* GitHub Pages SPA redirect: restores the URL encoded by 404.html */}
         <Script id="spa-redirect" strategy="beforeInteractive">{`
           (function() {
             var params = new URLSearchParams(window.location.search);
@@ -34,11 +35,13 @@ export default function RootLayout({
           })();
         `}</Script>
       </head>
-      <body className={`${inter.variable} font-sans antialiased bg-gray-50 dark:bg-gray-900`}>
-        <Header />
-        <main className="min-h-screen">
-          {children}
-        </main>
+      <body className={`${inter.variable} antialiased`}>
+        <ThemeProvider>
+          <Header />
+          <main>
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -2,16 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Mountain, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Mountain, User, LogOut, LayoutDashboard, Sun, Moon } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useEffect, useState } from 'react';
+import { useTheme } from '@/lib/theme-context';
 
 export function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
   const supabase = createClient();
 
+  let theme = 'light';
+  let toggleTheme = () => {};
+
+  try {
+    const themeContext = useTheme();
+    theme = themeContext.theme;
+    toggleTheme = themeContext.toggleTheme;
+  } catch (e) {
+    // Theme provider not available during SSR
+  }
+
   useEffect(() => {
+    setMounted(true);
+
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
@@ -33,24 +48,27 @@ export function Header() {
   };
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-black/80 border-b border-[var(--border-color)] transition-colors">
+      <div className="container mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center space-x-2 group">
-            <Mountain className="w-8 h-8 text-blue-600 group-hover:text-blue-700 transition-colors" />
-            <span className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 shadow-lg group-hover:shadow-xl transition-shadow">
+              <Mountain className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-semibold tracking-tight" style={{ color: 'var(--foreground)' }}>
               LITHOFINDER
             </span>
           </Link>
 
-          <nav className="flex items-center space-x-6">
+          <nav className="flex items-center space-x-2">
             <Link
               href="/"
-              className={`text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                 pathname === '/'
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'bg-[var(--accent)] text-white shadow-md'
+                  : 'hover:bg-[var(--hover-bg)]'
               }`}
+              style={pathname !== '/' ? { color: 'var(--foreground)' } : undefined}
             >
               Search Slabs
             </Link>
@@ -59,18 +77,20 @@ export function Header() {
               <>
                 <Link
                   href="/dashboard"
-                  className={`flex items-center space-x-1 text-sm font-medium transition-colors ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     pathname === '/dashboard'
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                      ? 'bg-[var(--accent)] text-white shadow-md'
+                      : 'hover:bg-[var(--hover-bg)]'
                   }`}
+                  style={pathname !== '/dashboard' ? { color: 'var(--foreground)' } : undefined}
                 >
                   <LayoutDashboard className="w-4 h-4" />
                   <span>Dashboard</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center space-x-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-600 dark:hover:text-red-400 transition-all"
+                  style={{ color: 'var(--foreground)' }}
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Sign Out</span>
@@ -79,12 +99,22 @@ export function Header() {
             ) : (
               <Link
                 href="/auth"
-                className="flex items-center space-x-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium hover:bg-[var(--hover-bg)] transition-all"
+                style={{ color: 'var(--foreground)' }}
               >
                 <User className="w-4 h-4" />
                 <span>Sign In</span>
               </Link>
             )}
+
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl hover:bg-[var(--hover-bg)] transition-all ml-2"
+              style={{ color: 'var(--foreground)' }}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
           </nav>
         </div>
       </div>

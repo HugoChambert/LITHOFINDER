@@ -43,28 +43,28 @@ export function SearchFilters({ onSearch }: SearchFiltersProps) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+    <div className="card-elevated p-8 mb-12" style={{ background: 'var(--card-background)' }}>
       <form onSubmit={handleSearchSubmit} className="space-y-6">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: 'var(--text-secondary)' }} />
           <input
             type="text"
-            placeholder="Search stone name (e.g., Taj Mahal, Fantasy Brown, Sea Pearl)"
+            placeholder="Search stone name (e.g., Taj Mahal, Fantasy Brown)"
             value={filters.query}
             onChange={(e) => handleFilterChange('query', e.target.value)}
-            className="w-full pl-12 pr-4 py-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-lg"
+            className="input-field w-full pl-14 pr-6 py-4 text-lg"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
               Material Type
             </label>
             <select
               value={filters.material}
               onChange={(e) => handleFilterChange('material', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="input-field w-full"
             >
               {materials.map((material) => (
                 <option key={material} value={material}>
@@ -75,13 +75,13 @@ export function SearchFilters({ onSearch }: SearchFiltersProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
               Color
             </label>
             <select
               value={filters.color}
               onChange={(e) => handleFilterChange('color', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="input-field w-full"
             >
               {colors.map((color) => (
                 <option key={color} value={color}>
@@ -92,13 +92,13 @@ export function SearchFilters({ onSearch }: SearchFiltersProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
               Finish
             </label>
             <select
               value={filters.finish}
               onChange={(e) => handleFilterChange('finish', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="input-field w-full"
             >
               {finishes.map((finish) => (
                 <option key={finish} value={finish}>
@@ -109,13 +109,13 @@ export function SearchFilters({ onSearch }: SearchFiltersProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
               Thickness
             </label>
             <select
               value={filters.thickness}
               onChange={(e) => handleFilterChange('thickness', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="input-field w-full"
             >
               {thicknesses.map((thickness) => (
                 <option key={thickness} value={thickness}>
@@ -127,7 +127,7 @@ export function SearchFilters({ onSearch }: SearchFiltersProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
             Location (City or State)
           </label>
           <input
@@ -135,7 +135,7 @@ export function SearchFilters({ onSearch }: SearchFiltersProps) {
             placeholder="Enter city or state"
             value={filters.location}
             onChange={(e) => handleFilterChange('location', e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            className="input-field w-full"
           />
         </div>
       </form>
